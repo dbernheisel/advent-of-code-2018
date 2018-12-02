@@ -16,8 +16,8 @@ defmodule Advent2018.Day1 do
     |> Enum.reduce_while({0, MapSet.new([0])}, &handle_frequency/2)
   end
 
-  defp handle_frequency(x, {current_frequency, seen_frequencies}) do
-    new_frequency = current_frequency + x
+  defp handle_frequency(incoming_frequency, {current_frequency, seen_frequencies}) do
+    new_frequency = current_frequency + incoming_frequency
 
     if new_frequency in seen_frequencies do
       {:halt, new_frequency}
