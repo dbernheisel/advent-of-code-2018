@@ -1,32 +1,29 @@
 defmodule Advent2018.Day3.Test do
   use ExUnit.Case
   alias Advent2018.Day3
+  @small_fixture """
+  #1 @ 1,3: 4x4
+  #2 @ 3,1: 4x4
+  #3 @ 5,5: 2x2
+  """
 
-  test "count_overlaps/1 returns number of overlapping square inches" do
-    file = """
-    #1 @ 1,3: 4x4
-    #2 @ 3,1: 4x4
-    #3 @ 5,5: 2x2
-    """
+  describe "count_overlaps/1" do
+    test "returns number of overlapping square inches" do
+      assert Day3.count_overlaps(@small_fixture) == 4
+    end
 
-    assert Day3.count_overlaps(file) == 4
+    test "returns number of overlapping square inches from file" do
+      assert Day3.count_overlaps() == 112378
+    end
   end
 
-  test "count_overlaps/1 returns number of overlapping square inches from file" do
-    assert Day3.count_overlaps() == 112378
-  end
+  describe "find_non_overlapped_claim/1" do
+    test "returns the square id of non-overlapped" do
+      assert Day3.non_overlapped_claim_id(@small_fixture) == "3"
+    end
 
-  test "find_non_overlapped_claim/1 returns the square id of non-overlapped" do
-    file = """
-    #1 @ 1,3: 4x4
-    #2 @ 3,1: 4x4
-    #3 @ 5,5: 2x2
-    """
-
-    assert Day3.non_overlapped_claim_id(file) == "3"
-  end
-
-  test "find_non_overlapped_claim/1 returns the square id of non-overlapped from file" do
-    assert Day3.non_overlapped_claim_id() == "603"
+    test "returns the square id of non-overlapped from file" do
+      assert Day3.non_overlapped_claim_id() == "603"
+    end
   end
 end
