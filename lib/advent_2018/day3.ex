@@ -7,13 +7,29 @@ defmodule Advent2018.Day3 do
   defstruct [:id, :width, :height, :top_left_x, :top_left_y, spots: []]
 
   def count_overlaps(file \\ @fixture) do
-    {dupes, _} =
+    {_, dupes, _} =
       file
       |> build_stream()
       |> Stream.map(&parse_row/1)
       |> Stream.map(&build_claim/1)
-      |> Enum.reduce({MapSet.new(), MapSet.new()}, &find_duplicates/2)
+      |> Enum.reduce({[], MapSet.new(), MapSet.new()}, &find_duplicates/2)
+
     Enum.count(dupes)
+  end
+
+  def non_overlapped_claim_id(file \\ @fixture) do
+    {claims, dupes, _} =
+      file
+      |> build_stream()
+      |> Stream.map(&parse_row/1)
+      |> Stream.map(&build_claim/1)
+      |> Enum.reduce({[], MapSet.new(), MapSet.new()}, &find_duplicates/2)
+
+    claims
+    |> Enum.find(fn claim ->
+      MapSet.disjoint?(claim.spots, dupes)
+    end)
+    |> Map.get(:id)
   end
 
   defp parse_row(row) do
@@ -34,8 +50,9 @@ defmodule Advent2018.Day3 do
     } |> mark_spots()
   end
 
-  defp find_duplicates(claim, {dupes, spots}) do
+  defp find_duplicates(claim, {claims, dupes, spots}) do
     {
+      [claim | claims],
       MapSet.union(dupes, MapSet.intersection(claim.spots, spots)),
       MapSet.union(claim.spots, spots)
     }
